@@ -18,8 +18,11 @@ public class CRUDApp {
         String first_name, last_name, email, enrollment_date, new_email;
 
         try {
+            // Connect to db
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(url, user, password);
+
+            // menu
             while (!exit){
                 System.out.print("\nWelcome to Burger King may I take your order: \n1. Get all students\n2. Add student\n3. Update student email\n4. Delete student\n5. Quit\nEnter here: ");
                 input = s.nextInt();
@@ -65,7 +68,9 @@ public class CRUDApp {
         System.out.println("See ya.");
     }// end main
 
+    // delete student_id
     private static void deleteStudent(int student_id){
+        // Running "DELETE FROM students WHERE student_id = [userInput]"
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM students WHERE student_id = ?");
             preparedStatement.setInt(1, student_id);
@@ -77,7 +82,9 @@ public class CRUDApp {
         System.out.println("Successfully deleted student from database");
     }// end student_id
 
+    // update email
     private static void updateStudentEmail(int student_id, String new_email){
+        // Running "UPDATE students SET email = [userInput] WHERE student_id = [userInput]" SQL command
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE students SET email = ? WHERE student_id = ?");
             preparedStatement.setString(1, new_email);
