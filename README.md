@@ -6,6 +6,7 @@ Trista Wang
 - README.md
 - students.sql
 - CRUPApp.java
+- pom.xml
 
 # Installation
 - Install IntelliJ, no other packages needed
