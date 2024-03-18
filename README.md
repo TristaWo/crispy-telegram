@@ -27,4 +27,4 @@ String url = "jdbc:postgresql://localhost:5432/COMP3005Assignment3";
 - Run CRUDApp.java
 
 # Video Demo
-https://youtu.be/wGCHOgXaQyw
+https://youtu.be/mCFcOg4zhKY
