@@ -14,18 +14,26 @@ public class CRUDApp {
 
         // variables
         boolean exit = false;
-        int input, student_id;
+        int input = 0;
+        int student_id;
         String first_name, last_name, email, enrollment_date, new_email;
 
         try {
-            // Connect to db
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(url, user, password);
-
-            // menu
             while (!exit){
                 System.out.print("\nWelcome to Burger King may I take your order: \n1. Get all students\n2. Add student\n3. Update student email\n4. Delete student\n5. Quit\nEnter here: ");
-                input = s.nextInt();
+                while (s.hasNext()){
+                    if (s.hasNextInt()) {
+                        input = s.nextInt();
+                        break;
+                    }
+                    else {
+                        System.out.println("ERROR: Incorrect input");
+                        s.nextLine();
+                        System.out.print("\nWelcome to Burger King may I take your order: \n1. Get all students\n2. Add student\n3. Update student email\n4. Delete student\n5. Quit\nEnter here: ");
+                    }
+                }
                 switch (input) {
                     case 1:
                         getAllStudents();
@@ -68,23 +76,20 @@ public class CRUDApp {
         System.out.println("See ya.");
     }// end main
 
-    // delete student_id
     private static void deleteStudent(int student_id){
-        // Running "DELETE FROM students WHERE student_id = [userInput]"
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM students WHERE student_id = ?");
             preparedStatement.setInt(1, student_id);
             preparedStatement.executeUpdate();
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("Could not delete student from database");
+            System.out.println("\nCould not delete student from database");
+            return;
         }
-        System.out.println("Successfully deleted student from database");
+        System.out.println("\nSuccessfully deleted student from database");
     }// end student_id
 
-    // update email
     private static void updateStudentEmail(int student_id, String new_email){
-        // Running "UPDATE students SET email = [userInput] WHERE student_id = [userInput]" SQL command
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE students SET email = ? WHERE student_id = ?");
             preparedStatement.setString(1, new_email);
@@ -92,9 +97,10 @@ public class CRUDApp {
             preparedStatement.executeUpdate();
         }catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Could not update email");
+            System.out.println("\nCould not update email");
+            return;
         }
-        System.out.println("Email successfully updated.");
+        System.out.println("\nEmail successfully updated.");
     }// end updateStudentEmail
 
     private static void addStudent(String first_name, String last_name, String email, String enrollment_date) {
@@ -109,8 +115,10 @@ public class CRUDApp {
             preparedStatement.executeUpdate();
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("Could not add student to database!");}
-        System.out.println("Student successfully added.");
+            System.out.println("\nCould not add student to database!");
+            return;
+        }
+        System.out.println("\nStudent successfully added.");
     }// end addStudent
 
     private static void getAllStudents(){
@@ -125,6 +133,10 @@ public class CRUDApp {
                 // Formatting output nicely
                 System.out.printf("%-20s %-20s %-20s %-40s %-10s", resultSet.getString("student_id"), resultSet.getString("first_name"), resultSet.getString("last_name"), resultSet.getString("email"), resultSet.getString("enrollment_date") + "\n");
             }// end while
-        }catch(Exception e){}
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("\nCould not get all students!");
+            return;
+        }
     }// end getAllStudents
 }// end class
